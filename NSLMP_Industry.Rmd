@@ -29,7 +29,10 @@ Industry<-read.table("Mowi_FIN.csv",
 
 # Accuracy of sea lice counts: NSLMP vs. industry producer’s data
 
-Sea lice data from the NSLMP and industry producer monitoring were analyzed to assess differences in reported sea lice counts. All analyses focused on the average sea lice count per pen, either for total mobile sea lice or total adult females. Therefore, the datasets were adjusted to the pen level by calculating the mean of abundance per inspection (pen on salmon farm and date) and retaining only the necessary variables.
+Sea lice data from the NSLMP and industry producer monitoring were analyzed to assess differences in reported sea lice counts.
+All analyses focused on the average sea lice count per pen, either for total mobile sea lice or total adult females. 
+Therefore, the datasets were adjusted to the pen level by calculating the mean of abundance per inspection
+(pen on salmon farm and date) and retaining only the necessary variables.
 
 Industry
 
@@ -63,7 +66,8 @@ colnames(NSLMP1)[c(1:7)]<-c('Site','Date','Month','Year','Pen','SampleID','PenID
 NSLMP1$Origin<-'NSLMP'
 ```
 
-The NSLMP dataset was filtered to include only data from the same salmon farms and years as the industry producer’s dataset (Oct 2015 – Dec 2019).
+The NSLMP dataset was filtered to include only data from the same salmon farms and years as the industry producer’s dataset
+(Oct 2015 – Dec 2019).
 
 ```{r}
 # Keep only data from the same sites, year, and month
@@ -74,7 +78,8 @@ NSLMP2<-NSLMP1[NSLMP1$Ident %in% Industry1$Ident,]
 Industry2<-Industry1[Industry1$Ident %in% NSLMP2$Ident,]
 ```
 
-A variable of day for date of inspection and ID for every individual mean sea lice count per pen was added to the dataset. A copy of the dataset was created.
+A variable of day for date of inspection and ID for every individual mean sea lice count per pen was added to the dataset.
+A copy of the dataset was created.
 
 ```{r}
 # ID
@@ -90,7 +95,10 @@ Industry3<-Industry2
 NSLMP3<-NSLMP2
 ```
 
-To align the datasets, sea lice counts from individual pens in the NSLMP dataset were matched to the closest available inspection date in the industry producer’s dataset. If multiple pens were sampled on the same farm and date, a pen different from the one inspected by the NSLMP was randomly selected. Sample points with inspection dates more than one month apart were excluded from the analysis.
+To align the datasets, sea lice counts from individual pens in the NSLMP dataset were matched to the closest available
+inspection date in the industry producer’s dataset. If multiple pens were sampled on the same farm and date, a pen different
+from the one inspected by the NSLMP was randomly selected. Sample points with inspection dates more than one month apart were
+excluded from the analysis.
 
 Matching a single pen from NSLMP dataset to a pen in the Industry dataset with the closest inspection date
 
@@ -145,7 +153,8 @@ for (i in 2:length(unique(NSLMP3$ID))){
 	}}
 ```
 
-The new Industry dataset has much lower number of means pen pen compared to the original Industry dataset, because every mean per pen in the Industry dataset is matched to one NSLMP observation of mean per pen.
+The new Industry dataset has much lower number of means pen pen compared to the original Industry dataset, because every mean
+per pen in the Industry dataset is matched to one NSLMP observation of mean per pen.
 
 ```{r}
 # New Industry dataset
@@ -191,7 +200,8 @@ setdiff(NLS_select$MiID,Ind_select$MiID)
 nrow(IND_NSL)
 ```
 
-The number of days between matched pairs of pens between Industry and NSLMP inspection was determined and the differences explored. Dates of inspection more than 30 days apart were identified as outliers and excluded from the analysis.
+The number of days between matched pairs of pens between Industry and NSLMP inspection was determined and the differences explored.
+Dates of inspection more than 30 days apart were identified as outliers and excluded from the analysis.
 
 ```{r}
 IND_NSL$Day_diff<-as.Date(IND_NSL$MI_Date)-as.Date(IND_NSL$Mowi_Date)
@@ -219,7 +229,8 @@ The proportion of inspection in both datasets conducted on the same day was dete
 nrow(IND_NSL1[IND_NSL1$Day_diff==0,])/nrow(IND_NSL1)
 ```
 
-The mean and differences between the mean values per pen recorded by the Industry and by the NSLMP for both total mobiles and total adult females were calculated.
+The mean and differences between the mean values per pen recorded by the Industry and by the NSLMP for both total mobiles
+and total adult females were calculated.
 
 ```{r}
 IND_NSL1$Total_diff<-IND_NSL1$MI_Total-IND_NSL1$Mowi_Total
@@ -228,7 +239,8 @@ IND_NSL1$Total_mean<-apply(IND_NSL1[,c(3,6)],1,mean)
 IND_NSL1$Females_mean<-apply(IND_NSL1[,c(4,7)],1,mean)
 ```
 
-The differences between sea lice counts recorded by the Industry and by the NSLMP were visualised using the Bland-Altmand plots, separately for total mobiles and total adult females.
+The differences between sea lice counts recorded by the Industry and by the NSLMP were visualised using the Bland-Altmand plots,
+separately for total mobiles and total adult females.
 
 Total mobiles
 
@@ -309,7 +321,8 @@ grid.arrange(TM,TF,ncol = 2)
 
 ## Testing of differences between sampling
 
-The Shapiro-Wilk test was used to test the normality of the distribution between the differences of Industry and NSLMP for total mobiles and total adult females, separately.
+The Shapiro-Wilk test was used to test the normality of the distribution between the differences of Industry and NSLMP
+for total mobiles and total adult females, separately.
 
 Total mobiles
 
@@ -317,13 +330,16 @@ Total mobiles
 shapiro.test(IND_NSL1$Total_diff)
 ```
 
-The results of the Shapiro-Wilk test showed the differences between the two groups of sea lice sampling significantly deviated from a normal distribution. The distribution was visualised to determine the symmetricity of the data and identify possible outliers.
+The results of the Shapiro-Wilk test showed the differences between the two groups of sea lice sampling significantly
+deviated from a normal distribution. The distribution was visualised to determine the symmetricity of the data and identify
+possible outliers.
 
 ```{r, include=FALSE}
 hist(IND_NSL1$Total_diff,ylim=c(0,100),breaks=20)
 ```
 
-The non-parametric Wilcoxon matched pairs test was used to compare the differences in medians between the two groups of reported sea lice counts.
+The non-parametric Wilcoxon matched pairs test was used to compare the differences in medians between the two groups
+of reported sea lice counts.
 
 ```{r}
 wilcox.test(IND_NSL1$Mowi_Total,IND_NSL1$MI_Total, paired = TRUE, alternative = "two.sided",
@@ -336,7 +352,9 @@ Total adult females
 shapiro.test(IND_NSL1$Females_diff)
 ```
 
-The results of the Shapiro-Wilk test showed the differences between the two groups of sea lice sampling significantly deviated from a normal distribution. The distribution was visualised to determine the symmetricity of the data and identify possible outliers.
+The results of the Shapiro-Wilk test showed the differences between the two groups of sea lice sampling significantly
+deviated from a normal distribution. The distribution was visualised to determine the symmetricity of the data and identify
+possible outliers.
 
 ```{r, include=FALSE}
 hist(IND_NSL1$Females_diff,ylim=c(0,100),breaks=20)
@@ -347,7 +365,8 @@ wilcox.test(IND_NSL1$Mowi_Females,IND_NSL1$MI_Females, paired = TRUE, alternativ
 	conf.int = TRUE,detailed=TRUE)
 ```
 
-The correlation between the differences in dates of sampling and the differences in sea lice counts between the industry and NSLMP was determined separately for total mobiles and total adult females.
+The correlation between the differences in dates of sampling and the differences in sea lice counts between the industry
+and NSLMP was determined separately for total mobiles and total adult females.
 
 ```{r}
 # Total mobiles
@@ -360,7 +379,9 @@ cor(as.numeric(abs(IND_NSL1$Day_diff)),IND_NSL1$Females_diff)
 
 ## Industry data
 
-To explore the influence of treatment trigger levels on the accuracy of the reported sea lice counts reported by the Industry, we used the pen-level mean abundance datasets (NSLMP2, Industry2). The treatment trigger levels were visualised by a red line for the Industry data.
+To explore the influence of treatment trigger levels on the accuracy of the reported sea lice counts reported by the Industry,
+we used the pen-level mean abundance datasets (NSLMP2, Industry2). The treatment trigger levels were visualised by a red line
+for the Industry data.
 
 To improve clarity, abundance values greater than 2 for both NSLMP and Industry data were excluded from the final graphs.
 
@@ -421,7 +442,8 @@ Industry_Coo<- data.frame(Longitude = c(unique(Industry$Longitude)),
 				Latitude = c(unique(Industry$Latitude)))
 ```
 
-The resulting datasets were then use to visualize the location of each salmon farm on the map of Ireland. The farms monitores by the NSLMP and the Industry were plotted in two different figures. 
+The resulting datasets were then use to visualize the location of each salmon farm on the map of Ireland. The farms monitores
+by the NSLMP and the Industry were plotted in two different figures. 
 
 ```{r}
 world <- ne_countries(scale = "medium", returnclass = "sf")
