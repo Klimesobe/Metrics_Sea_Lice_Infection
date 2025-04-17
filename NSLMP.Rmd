@@ -24,7 +24,9 @@ NSLMP<-read.table("SeaLice_FIN.csv",
 	header = TRUE,sep = ',',fill = TRUE,dec = ".",na.strings = "NA")
 ```
 
-All analyses focused on the average sea lice count per pen, either for ovigerous females or total adult females. Therefore, the datasets were adjusted to the pen level by calculating the mean of both abundance and prevalence per Sample ID and retaining only the necessary variables.
+All analyses focused on the average sea lice count per pen, either for ovigerous females or total adult females. 
+Therefore, the datasets were adjusted to the pen level by calculating the mean of both abundance and prevalence
+per Sample ID and retaining only the necessary variables.
 
 Ovigerous females
 ```{r}
@@ -53,7 +55,9 @@ OF_TF<-merge(OF,TF,by=c('ID','Month'),all=TRUE)
 ```
 
 # Prevalence as a metric for sea lice infestation
-To assess the suitability of prevalence as a metric for sea lice infestation levels, we analyzed the relationship between prevalence and abundance.The mean abundance was plotted against the mean prevalence separately for ovigerous and total adult female sea lice. Abundance values higher than 4 were excluded from the final graphs to improve clarity.
+To assess the suitability of prevalence as a metric for sea lice infestation levels, we analyzed the relationship between
+prevalence and abundance.The mean abundance was plotted against the mean prevalence separately for ovigerous and total
+adult female sea lice. Abundance values higher than 4 were excluded from the final graphs to improve clarity.
 
 Ovigerous females
 ```{r}
@@ -94,7 +98,8 @@ round(nrow(OF_TF[OF_TF$AbunOF>4,])/nrow(OF_TF),3)
 round(nrow(OF_TF[OF_TF$AbunTF>4,])/nrow(OF_TF),3)
 ```
 
-The graphs illustrating the relationship between prevalence and abundance for both ovigerous and total adult female sea lice were combined into a single plot.
+The graphs illustrating the relationship between prevalence and abundance for both ovigerous and total adult female sea lice
+were combined into a single plot.
 
 ```{r}
 grid.arrange(Graph_OF,Graph_TF,ncol = 2) 
@@ -102,7 +107,11 @@ grid.arrange(Graph_OF,Graph_TF,ncol = 2)
 
 # Relationship between ovigerous females and total adult females
 
-For the exploration of the relationship between ovigerous females and total adult females, the dataset of mean abundance at pen level (OF_TF) was used. Two separate linear regression models were used to examine the relationship between ovigerous females and total adult females. The fitted regression equations were determined and used to calculate the corresponding treatment trigger levels between life stages. The treatment trigger levels were calculated separately for the spring period (0.5) and summer to winter (2).
+For the exploration of the relationship between ovigerous females and total adult females, the dataset of mean abundance
+at pen level (OF_TF) was used. Two separate linear regression models were used to examine the relationship between
+ovigerous females and total adult females. The fitted regression equations were determined and used to calculate
+the corresponding treatment trigger levels between life stages. The treatment trigger levels were calculated separately
+for the spring period (0.5) and summer to winter (2).
 
 Ovigerous females
 ```{r}
@@ -124,7 +133,8 @@ round((0.71039*0.5)  -0.02424,2)
 # Summer to winter
 round((0.71039*2)  -0.02424,2)
 ```
-The relationship between the abundance of ovigerous females and total adult females was visualised in a graph. Abundance values higher than 15 for ovigerous females and 20 for total adult females were excluded from the final graphs to improve clarity.
+The relationship between the abundance of ovigerous females and total adult females was visualised in a graph. Abundance values
+higher than 15 for ovigerous females and 20 for total adult females were excluded from the final graphs to improve clarity.
 
 ```{r}
 ggplot(OF_TF,aes(AbunOF,AbunTF)) +
@@ -139,7 +149,8 @@ ggplot(OF_TF,aes(AbunOF,AbunTF)) +
 	theme(text = element_text(size = 15))
 ```
 
-The total number of observations in the dataset and proportion of discarded values (abundance higher than 15 OF, 20 TF) was determined. 
+The total number of observations in the dataset and proportion of discarded values (abundance higher than 15 OF, 20 TF)
+was determined. 
 ```{r}
 nrow(OF_TF)
 # Ovigerous females
@@ -151,7 +162,9 @@ round(nrow(OF_TF[OF_TF$AbunTF>20,])/nrow(OF_TF),3)
 
 ## NSLMP
 
-To explore the influence of treatment trigger levels on the accuracy of the reported sea lice counts, we used the pen-level mean abundance dataset (OF_TF). The dataset was split into two seasonal groups—spring, and summer to winter—reflecting the different treatment trigger levels applied in Ireland by the Marine Institute (MI). 
+To explore the influence of treatment trigger levels on the accuracy of the reported sea lice counts, we used the pen-level
+mean abundance dataset (OF_TF). The dataset was split into two seasonal groups—spring, and summer to winter—reflecting
+the different treatment trigger levels applied in Ireland by the Marine Institute (MI). 
 
 ```{r}
 # Spring
@@ -160,7 +173,8 @@ OF_TF_Spring<-OF_TF[OF_TF$Month %in% c(3,4,5),]
 OF_TF_Winter<-OF_TF[!(OF_TF$Month %in% c(3,4,5)),]
 ```
 
-To improve clarity, abundance values greater than 1.5 for spring and greater than 3 for summer to winter were excluded from the final graphs.
+To improve clarity, abundance values greater than 1.5 for spring and greater than 3 for summer to winter were excluded
+from the final graphs.
 
 ```{r}
 # Spring
@@ -169,7 +183,8 @@ OF_TF_Spring1<-OF_TF_Spring[OF_TF_Spring$AbunTF<1.5,]
 OF_TF_Winter1<-OF_TF_Winter[OF_TF_Winter$AbunTF<3,]
 ```
 
-Histograms of sea lice counts per pen for ovigerous and total adult females were plotted separately for spring and for summer to winter. The treatment trigger levels were visualised by a red line for ovigerous females. 
+Histograms of sea lice counts per pen for ovigerous and total adult females were plotted separately for spring and for summer to winter.
+The treatment trigger levels were visualised by a red line for ovigerous females. 
 
 ```{r}
 # Ovigerous females, spring
@@ -227,7 +242,8 @@ TF_Winter<-ggplot(OF_TF_Winter1,aes(AbunTF))  +
 		axis.title.y=element_blank())
 ```
 
-The graphs illustrating the frequency of reported sea lice levels per pen for both ovigerous and total adult female sea lice were combined into a single plot.
+The graphs illustrating the frequency of reported sea lice levels per pen for both ovigerous and total adult female
+sea lice were combined into a single plot.
 
 ```{r}
 grid.arrange(OF_Spring,TF_Spring,OF_Winter,TF_Winter,ncol = 2)  
